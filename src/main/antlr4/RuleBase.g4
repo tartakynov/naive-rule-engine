@@ -50,7 +50,6 @@ COMPARISON_OPERATOR
     : EQ | NEQ | LT | LTE | GT | GTE
     ;
 
-
 STRING
     : '"' ( ~('"'|'\\') | ('\\' .) )* '"'
     ;
