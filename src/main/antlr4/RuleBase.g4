@@ -39,8 +39,8 @@ literal
     ;
 
 number
-    : DECIMAL_VALUE  #decimalLiteral
-    | INTEGER_VALUE  #integerLiteral
+    : DECIMAL_VALUE                                                   #decimalLiteral
+    | INTEGER_VALUE                                                   #integerLiteral
     ;
 
 booleanValue
