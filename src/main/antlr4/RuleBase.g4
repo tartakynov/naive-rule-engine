@@ -9,7 +9,8 @@ expression
     ;
 
 booleanExpression
-    : left=booleanExpression operator=AND right=booleanExpression     #logicalBinary
+    : NOT booleanExpression                                           #logicalNot
+    | left=booleanExpression operator=AND right=booleanExpression     #logicalBinary
     | left=booleanExpression operator=OR right=booleanExpression      #logicalBinary
     | valueExpression                                                 #booleanDefault
     ;
@@ -40,7 +41,7 @@ qualifiedName
     ;
 
 identifier
-    : IDENTIFIER             #unquotedIdentifier
+    : IDENTIFIER                                                      #unquotedIdentifier
     ;
 
 number
@@ -58,6 +59,7 @@ OR: 'OR';
 AND: 'AND';
 TRUE: 'TRUE';
 FALSE: 'FALSE';
+NOT: 'NOT' | '!';
 
 EQ  : '=';
 NEQ : '<>' | '!=';
@@ -68,7 +70,7 @@ GTE : '>=';
 
 
 STRING
-    : '\'' ( ~'\'' | '\'\'' )* '\''
+    : '"' ( ~('"'|'\\') | ('\\' .) )* '"'
     ;
 
 INTEGER_VALUE
@@ -83,7 +85,7 @@ DECIMAL_VALUE
     ;
 
 IDENTIFIER
-    : (LETTER | '_') (LETTER | DIGIT | '_' | '@' )*
+    : (LETTER | '_') (LETTER | DIGIT | '_' )*
     ;
 
 fragment EXPONENT
