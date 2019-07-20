@@ -9,56 +9,46 @@ expression
     ;
 
 booleanExpression
-    : NOT booleanExpression                                           #logicalNot
-    | left=booleanExpression operator=AND right=booleanExpression     #logicalBinary
-    | left=booleanExpression operator=OR right=booleanExpression      #logicalBinary
-    | valueExpression                                                 #booleanDefault
+    : valueExpression                                                             #booleanDefault
+    | NOT booleanExpression                                                       #logicalNot
+    | left=booleanExpression operator=LOGICAL_OPERATOR right=booleanExpression    #logicalOperator
     ;
 
 valueExpression
-    : primaryExpression                                               #valueExpressionDefault
-    | left=valueExpression comparisonOperator right=valueExpression   #comparison
+    : primaryExpression                                                           #valueExpressionDefault
+    | left=valueExpression operator=COMPARISON_OPERATOR right=valueExpression     #comparisonOperator
     ;
 
 primaryExpression
-    : literal                                                         #literalExpression
-    | IDENTIFIER '(' ')'                                              #functionCall
-    | IDENTIFIER '(' (expression (',' expression)*)? ')'              #functionCall
-    | IDENTIFIER                                                      #columnReference
-    | '(' expression ')'                                              #parenthesizedExpression
-    ;
-
-comparisonOperator
-    : EQ | NEQ | LT | LTE | GT | GTE
+    : literal                                                                     #literalExpression
+    | IDENTIFIER '(' ')'                                                          #functionCall
+    | IDENTIFIER '(' (expression (',' expression)*)? ')'                          #functionCall
+    | IDENTIFIER                                                                  #columnReference
+    | '(' expression ')'                                                          #parenthesizedExpression
     ;
 
 literal
-    : STRING                                                          #stringLiteral
-    | number                                                          #numericLiteral
-    | booleanValue                                                    #booleanLiteral
+    : STRING                                                                      #stringLiteral
+    | number                                                                      #numericLiteral
+    | booleanValue                                                                #booleanLiteral
     ;
 
 number
-    : DECIMAL_VALUE                                                   #decimalLiteral
-    | INTEGER_VALUE                                                   #integerLiteral
+    : DECIMAL_VALUE                                                               #decimalLiteral
+    | INTEGER_VALUE                                                               #integerLiteral
     ;
 
 booleanValue
     : TRUE | FALSE
     ;
 
-OR: 'OR';
-AND: 'AND';
-TRUE: 'TRUE';
-FALSE: 'FALSE';
-NOT: 'NOT' | '!';
+LOGICAL_OPERATOR
+    : AND | OR
+    ;
 
-EQ  : '=';
-NEQ : '<>' | '!=';
-LT  : '<';
-LTE : '<=';
-GT  : '>';
-GTE : '>=';
+COMPARISON_OPERATOR
+    : EQ | NEQ | LT | LTE | GT | GTE
+    ;
 
 
 STRING
@@ -79,6 +69,19 @@ DECIMAL_VALUE
 IDENTIFIER
     : (LETTER | '_') (LETTER | DIGIT | '_' )* ('.' IDENTIFIER)*
     ;
+
+OR: 'OR';
+AND: 'AND';
+TRUE: 'TRUE';
+FALSE: 'FALSE';
+NOT: 'NOT' | '!';
+
+EQ  : '=';
+NEQ : '<>' | '!=';
+LT  : '<';
+LTE : '<=';
+GT  : '>';
+GTE : '>=';
 
 fragment EXPONENT
     : 'E' [+-]? DIGIT+
