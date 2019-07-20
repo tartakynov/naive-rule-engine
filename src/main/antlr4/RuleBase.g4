@@ -24,7 +24,7 @@ primaryExpression
     : literal                                                         #literalExpression
     | qualifiedName '(' ')'                                           #functionCall
     | qualifiedName '(' (expression (',' expression)*)? ')'           #functionCall
-    | qualifiedName                                                   #columnReference
+    | qualifiedName                                                   #featureReference
     | '(' expression ')'                                              #parenthesizedExpression
     ;
 
