@@ -1,0 +1,110 @@
+grammar RuleBase;
+
+tokens {
+    DELIMITER
+}
+
+expression
+    : booleanExpression
+    ;
+
+booleanExpression
+    : left=booleanExpression operator=AND right=booleanExpression     #logicalBinary
+    | left=booleanExpression operator=OR right=booleanExpression      #logicalBinary
+    | valueExpression                                                 #booleanDefault
+    ;
+
+valueExpression
+    : primaryExpression                                               #valueExpressionDefault
+    | left=valueExpression comparisonOperator right=valueExpression   #comparison
+    ;
+
+primaryExpression
+    : literal                                                         #literalExpression
+    | qualifiedName '(' ')'                                           #functionCall
+    | qualifiedName '(' (expression (',' expression)*)? ')'           #functionCall
+    | qualifiedName                                                   #columnReference
+    | '(' expression ')'                                              #parenthesizedExpression
+    ;
+
+comparisonOperator
+    : EQ | NEQ | LT | LTE | GT | GTE
+    ;
+
+booleanValue
+    : TRUE | FALSE
+    ;
+
+qualifiedName
+    : identifier ('.' identifier)*
+    ;
+
+identifier
+    : IDENTIFIER             #unquotedIdentifier
+    ;
+
+number
+    : DECIMAL_VALUE  #decimalLiteral
+    | INTEGER_VALUE  #integerLiteral
+    ;
+
+literal
+    : STRING                                                          #stringLiteral
+    | number                                                          #numericLiteral
+    | booleanValue                                                    #booleanLiteral
+    ;
+
+OR: 'OR';
+AND: 'AND';
+TRUE: 'TRUE';
+FALSE: 'FALSE';
+
+EQ  : '=';
+NEQ : '<>' | '!=';
+LT  : '<';
+LTE : '<=';
+GT  : '>';
+GTE : '>=';
+
+
+STRING
+    : '\'' ( ~'\'' | '\'\'' )* '\''
+    ;
+
+INTEGER_VALUE
+    : DIGIT+
+    ;
+
+DECIMAL_VALUE
+    : DIGIT+ '.' DIGIT*
+    | '.' DIGIT+
+    | DIGIT+ ('.' DIGIT*)? EXPONENT
+    | '.' DIGIT+ EXPONENT
+    ;
+
+IDENTIFIER
+    : (LETTER | '_') (LETTER | DIGIT | '_' | '@' )*
+    ;
+
+fragment EXPONENT
+    : 'E' [+-]? DIGIT+
+    ;
+
+fragment DIGIT
+    : [0-9]
+    ;
+
+fragment LETTER
+    : [A-Z]
+    ;
+
+WS
+    : [ \r\n\t]+ -> channel(HIDDEN)
+    ;
+
+// Catch-all for anything we can't recognize.
+// We use this to be able to ignore and recover all the text
+// when splitting statements with DelimiterLexer
+UNRECOGNIZED
+    : .
+    ;
