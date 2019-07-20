@@ -22,9 +22,9 @@ valueExpression
 
 primaryExpression
     : literal                                                         #literalExpression
-    | qualifiedName '(' ')'                                           #functionCall
-    | qualifiedName '(' (expression (',' expression)*)? ')'           #functionCall
-    | qualifiedName                                                   #featureReference
+    | IDENTIFIER '(' ')'                                              #functionCall
+    | IDENTIFIER '(' (expression (',' expression)*)? ')'              #functionCall
+    | IDENTIFIER                                                      #columnReference
     | '(' expression ')'                                              #parenthesizedExpression
     ;
 
@@ -34,14 +34,6 @@ comparisonOperator
 
 booleanValue
     : TRUE | FALSE
-    ;
-
-qualifiedName
-    : identifier ('.' identifier)*
-    ;
-
-identifier
-    : IDENTIFIER                                                      #unquotedIdentifier
     ;
 
 number
@@ -85,7 +77,7 @@ DECIMAL_VALUE
     ;
 
 IDENTIFIER
-    : (LETTER | '_') (LETTER | DIGIT | '_' )*
+    : (LETTER | '_') (LETTER | DIGIT | '_' )* ('.' IDENTIFIER)*
     ;
 
 fragment EXPONENT
