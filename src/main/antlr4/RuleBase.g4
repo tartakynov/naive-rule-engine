@@ -32,8 +32,10 @@ comparisonOperator
     : EQ | NEQ | LT | LTE | GT | GTE
     ;
 
-booleanValue
-    : TRUE | FALSE
+literal
+    : STRING                                                          #stringLiteral
+    | number                                                          #numericLiteral
+    | booleanValue                                                    #booleanLiteral
     ;
 
 number
@@ -41,10 +43,8 @@ number
     | INTEGER_VALUE  #integerLiteral
     ;
 
-literal
-    : STRING                                                          #stringLiteral
-    | number                                                          #numericLiteral
-    | booleanValue                                                    #booleanLiteral
+booleanValue
+    : TRUE | FALSE
     ;
 
 OR: 'OR';
