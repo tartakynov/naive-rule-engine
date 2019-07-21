@@ -4,6 +4,10 @@ tokens {
     DELIMITER
 }
 
+singleExpression
+    : expression EOF
+    ;
+
 expression
     : booleanExpression
     ;
@@ -11,12 +15,12 @@ expression
 booleanExpression
     : valueExpression                                                             #booleanDefault
     | NOT booleanExpression                                                       #logicalNot
-    | left=booleanExpression operator=LOGICAL_OPERATOR right=booleanExpression    #logicalOperator
+    | left=booleanExpression logicalOperator right=booleanExpression              #logicalOperation
     ;
 
 valueExpression
     : primaryExpression                                                           #valueExpressionDefault
-    | left=valueExpression operator=COMPARISON_OPERATOR right=valueExpression     #comparisonOperator
+    | left=valueExpression comparisonOperator right=valueExpression               #comparisonOperation
     ;
 
 primaryExpression
@@ -41,11 +45,11 @@ booleanValue
     : TRUE | FALSE
     ;
 
-LOGICAL_OPERATOR
+logicalOperator
     : AND | OR
     ;
 
-COMPARISON_OPERATOR
+comparisonOperator
     : EQ | NEQ | LT | LTE | GT | GTE
     ;
 
