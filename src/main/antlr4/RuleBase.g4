@@ -34,8 +34,8 @@ literal
     ;
 
 number
-    : DECIMAL_VALUE                                                               #decimalLiteral
-    | INTEGER_VALUE                                                               #integerLiteral
+    : MINUS? DECIMAL_VALUE                                                        #decimalLiteral
+    | MINUS? INTEGER_VALUE                                                        #integerLiteral
     ;
 
 booleanValue
@@ -81,6 +81,7 @@ LT  : '<';
 LTE : '<=';
 GT  : '>';
 GTE : '>=';
+MINUS: '-';
 
 fragment EXPONENT
     : 'E' [+-]? DIGIT+
