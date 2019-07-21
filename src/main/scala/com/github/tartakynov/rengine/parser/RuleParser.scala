@@ -10,7 +10,7 @@ class RuleParser {
     lexer.removeErrorListeners()
     val tokenStream = new CommonTokenStream(lexer)
     val parser = new RuleBaseParser(tokenStream)
-    astBuilder.visitExpression(parser.expression())
+    astBuilder.visitSingleExpression(parser.singleExpression())
   }
 
 }

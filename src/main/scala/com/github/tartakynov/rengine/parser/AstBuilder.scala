@@ -1,13 +1,19 @@
 package com.github.tartakynov.rengine.parser
 import com.github.tartakynov.rengine.tree._
 import org.antlr.v4.runtime.ParserRuleContext
-import org.antlr.v4.runtime.tree.ParseTree
+import org.antlr.v4.runtime.tree.{ParseTree, TerminalNode}
 
 import scala.collection.JavaConverters._
 
 class AstBuilder extends RuleBaseBaseVisitor[AnyRef] {
   protected def typedVisit[T](ctx: ParseTree): T = {
     ctx.accept(this).asInstanceOf[T]
+  }
+
+  override def visitSingleExpression(
+    ctx: RuleBaseParser.SingleExpressionContext
+  ): Expression = {
+    visit(ctx.expression()).asInstanceOf[Expression]
   }
 
   override def visitExpression(
@@ -72,13 +78,13 @@ class AstBuilder extends RuleBaseBaseVisitor[AnyRef] {
     expression(ctx.expression())
   }
 
-  override def visitComparisonOperator(
-    ctx: RuleBaseParser.ComparisonOperatorContext
+  override def visitComparisonOperation(
+    ctx: RuleBaseParser.ComparisonOperationContext
   ): Expression = {
     val left = expression(ctx.left)
     val right = expression(ctx.right)
-    val operator = ctx.operator.getType
-    operator match {
+    val operator = ctx.comparisonOperator.getChild(0).asInstanceOf[TerminalNode].getSymbol
+    operator.getType match {
       case RuleBaseParser.EQ  => EqualTo(left, right)
       case RuleBaseParser.NEQ => Not(EqualTo(left, right))
       case RuleBaseParser.LT  => LessThan(left, right)
@@ -94,13 +100,13 @@ class AstBuilder extends RuleBaseBaseVisitor[AnyRef] {
     Not(expression(ctx.booleanExpression()))
   }
 
-  override def visitLogicalOperator(
-    ctx: RuleBaseParser.LogicalOperatorContext
+  override def visitLogicalOperation(
+    ctx: RuleBaseParser.LogicalOperationContext
   ): Expression = {
     val left = expression(ctx.left)
     val right = expression(ctx.right)
-    val operator = ctx.operator.getType
-    operator match {
+    val operator = ctx.logicalOperator().getChild(0).asInstanceOf[TerminalNode].getSymbol
+    operator.getType match {
       case RuleBaseParser.AND => And(left, right)
       case RuleBaseParser.OR  => Or(left, right)
     }
