@@ -22,7 +22,7 @@ valueExpression
 primaryExpression
     : literal                                                                     #literalExpression
     | IDENTIFIER '(' (argument+=expression (',' argument+=expression)*)? ')'      #functionCall
-    | IDENTIFIER                                                                  #columnReference
+    | IDENTIFIER                                                                  #featureReference
     | '(' expression ')'                                                          #parenthesizedExpression
     ;
 
