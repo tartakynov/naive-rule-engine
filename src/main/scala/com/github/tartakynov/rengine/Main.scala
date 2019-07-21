@@ -5,7 +5,7 @@ object Main {
 
   def main(args: Array[String]): Unit = {
     val parser = new RuleParser()
-    val expression = parser.parse("A >= -1 AND A <= 5")
+    val expression = parser.parse("A(F, C(1)) = 1")
     System.out.println(expression.toString)
   }
 }
