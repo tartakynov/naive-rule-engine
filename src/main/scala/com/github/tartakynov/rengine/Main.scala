@@ -1,5 +1,6 @@
+package com.github.tartakynov.rengine
+
 object Main {
-  import parser.RuleBaseParser
 
   def main(args: Array[String]): Unit = {
     System.out.println("Hello world")
