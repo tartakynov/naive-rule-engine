@@ -10,6 +10,12 @@ class AstBuilder extends RuleBaseBaseVisitor[AnyRef] {
     ctx.accept(this).asInstanceOf[T]
   }
 
+  override def visitExpression(
+    ctx: RuleBaseParser.ExpressionContext
+  ): Expression = {
+    expression(ctx.booleanExpression())
+  }
+
   /**
     * Create an expression from the given context. This method just passes the context on to the
     * visitor and only takes care of typing (We assume that the visitor returns an Expression here).
