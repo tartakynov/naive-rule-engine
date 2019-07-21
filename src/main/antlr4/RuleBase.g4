@@ -53,6 +53,19 @@ comparisonOperator
     : EQ | NEQ | LT | LTE | GT | GTE
     ;
 
+OR: 'OR';
+AND: 'AND';
+TRUE: 'TRUE';
+FALSE: 'FALSE';
+NOT: 'NOT' | '!';
+
+EQ  : '=';
+NEQ : '<>' | '!=';
+LT  : '<';
+LTE : '<=';
+GT  : '>';
+GTE : '>=';
+
 STRING
     : '"' ( ~('"'|'\\') | ('\\' .) )* '"'
     ;
@@ -69,21 +82,8 @@ DECIMAL_VALUE
     ;
 
 IDENTIFIER
-    : (LETTER | '_') (LETTER | DIGIT | '_' )* ('.' IDENTIFIER)*
+    : (LETTER | '_') (LETTER | DIGIT | '_' )*
     ;
-
-OR: 'OR';
-AND: 'AND';
-TRUE: 'TRUE';
-FALSE: 'FALSE';
-NOT: 'NOT' | '!';
-
-EQ  : '=';
-NEQ : '<>' | '!=';
-LT  : '<';
-LTE : '<=';
-GT  : '>';
-GTE : '>=';
 
 MINUS: '-';
 
